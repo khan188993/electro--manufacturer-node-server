@@ -3,12 +3,11 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
-require('dotenv').config()
+require('dotenv').config();
 
 //Express App and Port Ready for use
 const app = express();
 const port = process.env.PORT || 5000;
-
 
 //Middle ware
 app.use(cors());
@@ -23,7 +22,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
    // DATABASE CONNECTED
    await client.connect();
-//    console.log('database connected');
+   //    console.log('database connected');
 
    //!DATABASE TABLE CREATING : (PRODUCTS,ORDERS,USERS,)
    const productsCollection = client.db(process.env.DB_NAME).collection('products');
@@ -93,6 +92,55 @@ async function run() {
             "upsertedCount": 0,
             "matchedCount": 1
         } */
+
+   //!Orders collection api
+   //!GET REQUEST DONE
+   app.get('/orders', async (req, res) => {
+      const query = req.query;
+      const result = await ordersCollection.find(query).toArray();
+      res.send(result);
+   });
+
+   //link : http://localhost:5000/products
+   //!POST REQUEST CODE
+   app.post('/orders', async (req, res) => {
+      //DATA collecting form input form
+      const orderData = req.body;
+      const result = await ordersCollection.insertOne(orderData);
+      res.send({ result: 'success' });
+   });
+
+   //link : http://localhost:5000/delete-products/628e58dd68ef2b08e512a82d
+   //!DELETE DATA FROM DATABASE
+   app.delete('/delete-order/:id', async (req, res) => {
+      const id = { _id: ObjectId(req.params.id) };
+
+      const result = await ordersCollection.deleteOne(id);
+
+      //response e object pabo {acknowlege:true,deletedCount:1};
+      res.send(result);
+   });
+
+   //new data add korle seta new add hoi ager gulo thake, put method id na milse se baniye dei and and new create kre, pathch thakle update krbe noy na,
+   //link : http://localhost:5000/update-products/628e58dd68ef2b08e512a82d
+   //!UPDATE DATABASE DATA
+   app.put('/update-order/:id', async (req, res) => {
+      const filter = { _id: ObjectId(req.params.id) };
+      const newOrder = req.body;
+
+      const options = {
+         upsert: true,
+      };
+      const updateDoc = {
+         $set: {
+            ...newOrder,
+         },
+      };
+      const result = await ordersCollection.updateOne(filter, updateDoc, options);
+
+      res.send(result);
+   });
+
 }
 run().catch(console.dir);
 

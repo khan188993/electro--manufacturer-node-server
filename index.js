@@ -3,29 +3,32 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
+require('dotenv').config()
 
 //Express App and Port Ready for use
 const app = express();
 const port = process.env.PORT || 5000;
+
 
 //Middle ware
 app.use(cors());
 //for post response getting
 app.use(express.json());
 
-//!DATABASE CONNECTION URL SETUP = uri change user, pass env,
-const uri = 'mongodb+srv://electro_pro_user:BZoNZxZ2qDUCJZQE@cluster0.44qqp.mongodb.net/?retryWrites=true&w=majority';
+//DATABASE CONNECTION URL SETUP = uri change user, pass env,
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.44qqp.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 //ASYNC FUNCTION FOR DATABASE CRUD Operation
 async function run() {
    // DATABASE CONNECTED
    await client.connect();
-   console.log('database connected');
+//    console.log('database connected');
 
    //!DATABASE TABLE CREATING : (PRODUCTS,ORDERS,USERS,)
-   const productsCollection = client.db('electro-pro').collection('products');
-   // console.log('created table');
+   const productsCollection = client.db(process.env.DB_NAME).collection('products');
+   const ordersCollection = client.db(process.env.DB_NAME).collection('orders');
+   console.log('created table');
 
    //link : http://localhost:5000/products
    //!GET REQUEST DONE

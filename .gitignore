@@ -1,2 +1,4 @@
 ignoreFolder
 node_modules
+.env
+products.json

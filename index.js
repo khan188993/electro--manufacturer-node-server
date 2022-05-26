@@ -30,7 +30,6 @@ async function run() {
    const usersCollection = client.db(process.env.DB_NAME).collection('users');
    const reviewsCollection = client.db(process.env.DB_NAME).collection('reviews');
 
-   console.log('created table');
 
    
 
@@ -68,7 +67,6 @@ async function run() {
    app.put('/update-products/:id', async (req, res) => {
       const filter = { _id: ObjectId(req.params.id) };
       const newProduct = req.body;
-      // console.log(id,newPhone);
 
       /* const newProduct = {
          product_img: 'd2fdf',

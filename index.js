@@ -29,7 +29,6 @@ async function run() {
    const ordersCollection = client.db(process.env.DB_NAME).collection('orders');
    const usersCollection = client.db(process.env.DB_NAME).collection('users');
    const reviewsCollection = client.db(process.env.DB_NAME).collection('reviews');
-   const blogsCollection = client.db(process.env.DB_NAME).collection('blogs');
 
    console.log('created table');
 

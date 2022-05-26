@@ -27,7 +27,13 @@ async function run() {
    //!DATABASE TABLE CREATING : (PRODUCTS,ORDERS,USERS,)
    const productsCollection = client.db(process.env.DB_NAME).collection('products');
    const ordersCollection = client.db(process.env.DB_NAME).collection('orders');
+   const usersCollection = client.db(process.env.DB_NAME).collection('users');
+   const reviewsCollection = client.db(process.env.DB_NAME).collection('reviews');
+   const blogsCollection = client.db(process.env.DB_NAME).collection('blogs');
+
    console.log('created table');
+
+   
 
    //link : http://localhost:5000/products
    //!GET REQUEST DONE
@@ -94,6 +100,16 @@ async function run() {
         } */
 
    //!Orders collection api
+
+   /* const orderFields = {
+        'user_name':'Arfan Khan',
+        'user_email':'',
+        'product_id':'',
+        'product_name':'',
+        'product_per_price':'23432',
+        'totalPrice':'33423',
+    } */
+
    //!GET REQUEST DONE
    app.get('/orders', async (req, res) => {
       const query = req.query;
@@ -112,8 +128,8 @@ async function run() {
 
    //link : http://localhost:5000/delete-products/628e58dd68ef2b08e512a82d
    //!DELETE DATA FROM DATABASE
-   app.delete('/delete-order/:id', async (req, res) => {
-      const id = { _id: ObjectId(req.params.id) };
+   app.delete('/delete-order/:product_id', async (req, res) => {
+      const id = { product_id:req.params.product_id };
 
       const result = await ordersCollection.deleteOne(id);
 
@@ -140,6 +156,10 @@ async function run() {
 
       res.send(result);
    });
+
+  
+
+
 
 }
 run().catch(console.dir);

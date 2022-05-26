@@ -268,7 +268,7 @@ run().catch(console.dir);
 
 //Test Api
 app.get('/', (req, res) => {
-   res.send('server response send = test successful');
+   res.send('server running = electro.pro api');
 });
 
 app.listen(port, () => {

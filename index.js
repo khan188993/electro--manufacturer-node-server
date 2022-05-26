@@ -215,7 +215,54 @@ async function run() {
       res.send(result);
    });
 
-   
+   //!usersCollection api
+
+   /* const reviewFields = {
+        'user_name':'Arfan Khan',
+        'user_email':'',
+        'product_id':'',
+        'product_name':'',
+        'product_per_price':'23432',
+        'totalPrice':'33423',
+    } */
+
+   //!GET REQUEST DONE
+   app.get('/users', async (req, res) => {
+      const query = req.query;
+      const result = await usersCollection.find(query).toArray();
+      res.send(result);
+   });
+
+   //link : http://localhost:5000/delete-products/628e58dd68ef2b08e512a82d
+   //!DELETE DATA FROM DATABASE
+   app.delete('/delete-users/:email', async (req, res) => {
+      const email = { user_email:req.params.email };
+      console.log(email);
+
+      const result = await usersCollection.deleteOne(email);
+      res.send({result:'deleted'});
+   });
+
+   //new data add korle seta new add hoi ager gulo thake, put method id na milse se baniye dei and and new create kre, pathch thakle update krbe noy na,
+   //link : http://localhost:5000/update-products/628e58dd68ef2b08e512a82d
+   //!UPDATE DATABASE DATA
+   app.put('/update-users/:id', async (req, res) => {
+      const filter = { _id: ObjectId(req.params.id) };
+      const newData = req.body;
+
+      const options = {
+         upsert: false,
+      };
+      const updateDoc = {
+         $set: {
+            ...newData,
+         },
+      };
+      const result = await usersCollection.updateOne(filter, updateDoc, options);
+
+      res.send(result);
+   });
+
 
 
 
